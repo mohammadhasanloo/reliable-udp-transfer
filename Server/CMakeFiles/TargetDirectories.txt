@@ -1,0 +1,3 @@
+/home/daniel/Downloads/tcp-protocol-master/Server/CMakeFiles/rebuild_cache.dir
+/home/daniel/Downloads/tcp-protocol-master/Server/CMakeFiles/edit_cache.dir
+/home/daniel/Downloads/tcp-protocol-master/Server/CMakeFiles/tcp_protocol.dir
