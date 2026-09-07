@@ -51,7 +51,6 @@ void SR_Sender::send_handling(){
                     sended = 0;
                     window_congestion_index++;
                     cwnd = max((int)floor(1.0 * cwnd / multiplicative_decrease), 1);
-                    start_window_packet = start_window_packet;
                     end_window_packet = min(start_window_packet + cwnd - 1, total_packets - 1);
                     mtx.unlock();
                     break;
@@ -69,7 +68,6 @@ void SR_Sender::send_handling(){
                     window.clear();
                     acked.clear();
                     cwnd = 1;
-                    start_window_packet = start_window_packet;
                     end_window_packet = start_window_packet;
                     mtx.unlock();
                     break;

@@ -1,12 +1,13 @@
 #ifndef TCP_PROTOCOL_FILEWRITER_H
 #define TCP_PROTOCOL_FILEWRITER_H
 
-using namespace std;
 
 #include <string>
 #include <iostream>
 #include "../Packet/Packet.h"
 #include "../Packet/PacketHandler.h"
+
+using namespace std;
 
 class FileWriter {
 

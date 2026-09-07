@@ -1,4 +1,5 @@
 #include "Server.h"
+#include "../RED/red.hpp"
 #include "../File Handler/FileReader.h"
 #include "../SR/SR_Sender.h"
 
@@ -29,7 +30,7 @@ void Server::init_server() {
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(3000);
-    int ret = bind(server_socket_fd, (struct sockaddr *)&address, sizeof(address));
+    int ret = ::bind(server_socket_fd, (struct sockaddr *)&address, sizeof(address));
     if (ret < 0) {
         perror("bind failed");
         exit(EXIT_FAILURE);

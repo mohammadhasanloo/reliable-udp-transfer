@@ -1,9 +1,15 @@
+#ifndef QUEUE_H
+#define QUEUE_H
+
+#include <cstdio>
+#include <cstdlib>
+
 typedef struct Queue {
     char *data;
     int front, rear, size, capacity;
 }Queue;
 
-Queue* createQueue(int maxElements) {
+static Queue* createQueue(int maxElements) {
     Queue *result;
     result = (Queue *) malloc(sizeof(Queue));
     result->data = (char *) malloc(maxElements*sizeof(char));
@@ -14,7 +20,7 @@ Queue* createQueue(int maxElements) {
     return result;
 }
 
-void add(Queue *queue, char value) {
+static void add(Queue *queue, char value) {
     if (queue->size == queue->capacity) {
         printf("Queue full\n");
     } else {
@@ -27,7 +33,7 @@ void add(Queue *queue, char value) {
     }
 }
 
-void delete(Queue *queue) {
+static void dequeue(Queue *queue) {
     if (queue->size == 0) {
         printf("Queue empty\n");
         return;
@@ -41,7 +47,7 @@ void delete(Queue *queue) {
     return;
 }
 
-char front(Queue *queue) {
+static char front(Queue *queue) {
     if(queue->size == 0) {
         printf("Queue empty\n");
         return '\0';
@@ -49,7 +55,7 @@ char front(Queue *queue) {
     return queue->data[queue->front];
 }
 
-void display(Queue *queue) {
+static void display(Queue *queue) {
     if (queue->size == 0) {
         printf("Queue empty\n");
         return;
@@ -69,3 +75,5 @@ void display(Queue *queue) {
         printf("\n");
     }
 }
+
+#endif // QUEUE_H

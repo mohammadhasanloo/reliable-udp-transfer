@@ -1,8 +1,6 @@
 #ifndef TCP_PROTOCOL_SERVER_H
 #define TCP_PROTOCOL_SERVER_H
 
-using namespace std;
-
 #include <string>
 #include <stdio.h>
 #include <iostream>
@@ -10,12 +8,16 @@ using namespace std;
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include "../queue.h"
+
 #include <chrono>
 
 #include "../Sender/Sender.h"
 #include "../Receiver/Receiver.h"
 #include "../File Handler/FileReader.h"
 #include "../Utils/constants.h"
+
+using namespace std;
 
 class Server {
 
@@ -29,7 +31,7 @@ private:
 
 public:
     explicit Server(string server_conf_file_dir);
-    void start_server(int strategy_option);
+    void start_server(int strategy_option, Queue *queue, char *buffer);
 
 private:
     void init_server();

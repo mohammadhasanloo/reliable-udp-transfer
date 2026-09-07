@@ -1,4 +1,5 @@
 #include "Client.h"
+#include "../RED/red.hpp"
 #include "../SR/SR_Receiver.h"
 
 int sendBufferToSocket(char *buffer, int buffer_size, int sock_fd);
@@ -55,6 +56,8 @@ void Client::receive_file(int strategy_option) {
     cout << "must receive " << number_of_packets << " packet" << endl;
     auto start = std::chrono::high_resolution_clock::now();
     // Process the packet according to the RED algorithm
+    Queue *queue = createQueue(RED_QUEUE_CAPACITY);
+    char buffer[RED_BUFFER_SIZE] = {0};
     red(queue, buffer);
 
     // selective repeat

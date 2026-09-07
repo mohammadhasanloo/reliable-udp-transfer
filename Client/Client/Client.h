@@ -1,12 +1,20 @@
 #ifndef TCP_PROTOCOL_CLIENT_H
 #define TCP_PROTOCOL_CLIENT_H
 
-using namespace std;
+#define RED_QUEUE_CAPACITY 128
+#define RED_BUFFER_SIZE 1024
+
 
 #include <iostream>
 #include <fstream>
 #include <cstring>
 #include <unistd.h>
+#include "../queue.h"
+
+#define RED_QUEUE_CAPACITY 128
+#define RED_BUFFER_SIZE 1024
+
+using namespace std;
 #include <cstdio>
 #include <cstdlib>
 #include <sys/socket.h>
@@ -22,6 +30,8 @@ using namespace std;
 #include "../File Handler/FileReader.h"
 #include "../Utils/constants.h"
 #include "../Packet/PacketHandler.h"
+
+using namespace std;
 
 class Client {
 

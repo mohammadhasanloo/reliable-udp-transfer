@@ -12,80 +12,80 @@
 #include <arpa/inet.h>
 #include <time.h>
 #include <signal.h>
-#include "queue.h"
+#include "../queue.h"
 
 #define max(A, B) (A >= B) ? A : B;
 
 // Algorithm's parameter initialization
-double avg = 0; // Average queue length
-int count = -1; // Count of packets since last probabilistic drop
-double wq = 0.002; // Queue weight; standard value of 0.002 for early congestion detection
-int minThreshold, maxThreshold;
-double maxp = 0.02; // Maximum probability of dropping a packet; standard value of 0.02
-double pb = 0; // Probability of dropping a packet
-time_t qTime; // Time since the queue was last idle
-Queue *queue; // Queue to store the packets
+static double red_avg = 0; // Average queue length
+static int red_count = -1; // Count of packets since last probabilistic drop
+static double red_wq = 0.002; // Queue weight; standard value of 0.002 for early congestion detection
+static int red_min_threshold, red_max_threshold;
+static double red_maxp = 0.02; // Maximum probability of dropping a packet; standard value of 0.02
+static double red_pb = 0; // Probability of dropping a packet
+static time_t red_qtime; // Time since the queue was last idle
+static Queue * red_queue; // Queue to store the packets
 
 // Handle CTRL+Z(stop signal) keyboard signal
-void sig_handler(int signo)
+static void sig_handler(int signo)
 {
   if (signo == SIGTSTP) {
-      queue->size = 0;
-      queue->front = 0;
-      queue->rear = -1;
-      qTime = time(NULL);
+      red_queue->size = 0;
+      red_queue->front = 0;
+      red_queue->rear = -1;
+      red_qtime = time(NULL);
   }
 }
 
-void error(const char* msg) {
+static void error(const char* msg) {
     perror(msg);
     exit(1);
 }
 
 
-void red(Queue *queue, char *buffer) {
+static void red(Queue *red_queue, char *buffer) {
     printf("Current packet : %c\n", buffer[0]);
     // Average queue length calculation
-    if (queue->size == 0) {
-        double m = (time(NULL) - qTime) / 0.001;
-        avg = pow((1 - wq), m) * avg;
+    if (red_queue->size == 0) {
+        double m = (time(NULL) - red_qtime) / 0.001;
+        red_avg = pow((1 - red_wq), m) * red_avg;
     } else {
-        avg = ((1 - wq)*avg) + (wq*queue->size);
+        red_avg = ((1 - red_wq)*red_avg) + (red_wq*red_queue->size);
     }
-    printf("Average queue length : %f\n", avg);
+    printf("Average queue length : %f\n", red_avg);
     // If the average length is in between minimum and maximum threshold,
     // Probabilistically drop a packet
-    if(minThreshold <= avg && avg < maxThreshold) {
-        count++;
-        pb = avg - minThreshold;
-        pb = pb * maxp;
-        pb = pb / (maxThreshold - minThreshold);
-        double pa = pb / (1 - (count*pb));
-        if (count == 50) {
-            printf("Count has reached 1/maxp; dropping the next packet\n");
+    if(red_min_threshold <= red_avg && red_avg < red_max_threshold) {
+        red_count++;
+        red_pb = red_avg - red_min_threshold;
+        red_pb = red_pb * red_maxp;
+        red_pb = red_pb / (red_max_threshold - red_min_threshold);
+        double pa = red_pb / (1 - (red_count*red_pb));
+        if (red_count == 50) {
+            printf("Count has reached 1/red_maxp; dropping the next packet\n");
             pa = 1.0;
         }
         float randomProb = (rand()%100)/100.0;
         if(randomProb < pa) {
             // Drop the packet with probability pa
             printf("Dropping packet : %c with probability : %f\n", buffer[0], pa);
-            // Since this packet was dropped, count is reinitialized to 0
-            count = 0;
+            // Since this packet was dropped, red_count is reinitialized to 0
+            red_count = 0;
         } else {
-            // Add the packet to the queue
-            add(queue, buffer[0]);
+            // Add the packet to the red_queue
+            add(red_queue, buffer[0]);
         }
-    } else if (maxThreshold <= avg) {
+    } else if (red_max_threshold <= red_avg) {
         // Drop the packet
         printf("Packet Dropped : %c\n", buffer[0]);
-        // Since this packet was dropped, count is reinitialized to 0
-        count = 0;
+        // Since this packet was dropped, red_count is reinitialized to 0
+        red_count = 0;
     } else {
         // Average queue length is below minimum threhold, accept all packets
-        // Add packet to the queue
-        add(queue, buffer[0]);
-        // Since the average queue length is below minimum threshold, initialize count to -1
-        count = -1;
+        // Add packet to the red_queue
+        add(red_queue, buffer[0]);
+        // Since the average queue length is below minimum threshold, initialize red_count to -1
+        red_count = -1;
     }
 }
 

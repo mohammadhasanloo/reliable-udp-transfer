@@ -1,7 +1,6 @@
 #ifndef TCP_PROTOCOL_SR_RECEIVER_H
 #define TCP_PROTOCOL_SR_RECEIVER_H
 
-using namespace std;
 
 #include <vector>
 #include <map>
@@ -11,6 +10,8 @@ using namespace std;
 #include "../Receiver/Receiver.h"
 #include "../Utils/constants.h"
 #include "../Packet/PacketHandler.h"
+
+using namespace std;
 
 
 class SR_Receiver {

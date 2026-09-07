@@ -1,7 +1,6 @@
 #ifndef TCP_PROTOCOL_FILEREADER_H
 #define TCP_PROTOCOL_FILEREADER_H
 
-using namespace std;
 
 #include <string>
 #include <cmath>
@@ -10,6 +9,8 @@ using namespace std;
 
 #include "../Packet/Packet.h"
 #include "../Packet/PacketHandler.h"
+
+using namespace std;
 
 class FileReader {
 

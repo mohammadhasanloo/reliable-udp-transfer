@@ -1,0 +1,12 @@
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile.cmake
+*.o
+*.out
+.idea/
+.DS_Store
+tcp_protocol
+client-tcp

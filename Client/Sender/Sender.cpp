@@ -1,5 +1,11 @@
 #include "Sender.h"
 
+// MSG_CONFIRM is a Linux-only hint to the ARP layer and has no
+// equivalent elsewhere; zero leaves the send behaviour unchanged.
+#ifndef MSG_CONFIRM
+#define MSG_CONFIRM 0
+#endif
+
 Sender::Sender(sockaddr_in socket_addres) {
     Sender::socket_address = socket_addres;
 }
